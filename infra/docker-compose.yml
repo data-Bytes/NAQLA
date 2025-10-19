@@ -1,0 +1,94 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    container_name: moodle-db
+    restart: always
+    environment:
+      POSTGRES_DB: moodle
+      POSTGRES_USER: moodle
+      POSTGRES_PASSWORD: moodle
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  redis:
+    image: redis:7-alpine
+    container_name: moodle-redis
+    restart: always
+    networks:
+      - internal
+
+  moodle:
+    image: moodlehq/moodle-php-apache:8.2
+    container_name: moodle-app
+    restart: always
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8080:80"        # Moodle will be available at http://localhost:8080
+    volumes:
+      - ../moodle:/var/www/html       # your cloned Moodle repo
+      - moodledata:/var/moodledata    # Moodle data directory
+    environment:
+      MOODLE_DOCKER_DBTYPE: pgsql
+      MOODLE_DOCKER_DBHOST: db
+      MOODLE_DOCKER_DBNAME: moodle
+      MOODLE_DOCKER_DBUSER: moodle
+      MOODLE_DOCKER_DBPASS: moodle
+      MOODLE_DOCKER_WWWROOT: /var/www/html
+    networks:
+      - internal
+      - public
+
+  cron:
+    image: moodlehq/moodle-php-apache:8.2
+    container_name: moodle-cron
+    restart: always
+    depends_on:
+      - moodle
+    command: bash -lc "while true; do /usr/local/bin/php /var/www/html/admin/cli/cron.php; sleep 60; done"
+    volumes:
+      - ../moodle:/var/www/html
+      - moodledata:/var/moodledata
+    networks:
+      - internal
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: moodle-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"    # pgAdmin will be available at http://localhost:5050
+    depends_on:
+      - db
+    networks:
+      - internal
+      - public
+
+  # frontend:
+  #   build: ../frontend
+  #   container_name: moodle-frontend
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"   # React app at http://localhost:3000
+  #   volumes:
+  #     - ../frontend:/app
+  #   stdin_open: true
+  #   tty: true
+  #   networks:
+  #     - internal
+  #     - public
+
+volumes:
+  db_data:
+  moodledata:
+
+networks:
+  internal: {}
+  public: {}

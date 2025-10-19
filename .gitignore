@@ -1,0 +1,22 @@
+# Node
+node_modules/
+dist/
+.vite/
+
+# Docker
+infra/db_data/
+infra/moodledata/
+infra/pgadmin_data/
+
+# Environment
+.env
+.env.*
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
+*.log
+moodle/
+moodledata/
+db_data/
