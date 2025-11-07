@@ -1,0 +1,92 @@
+
+services:
+  db:
+    image: postgres:15
+    container_name: moodle-db
+    restart: always
+    environment:
+      POSTGRES_DB: moodle
+      POSTGRES_USER: moodle
+      POSTGRES_PASSWORD: moodle
+    volumes:
+      - db_data:/bitnami/postgresql
+    networks:
+      - internal
+
+  redis:
+    image: redis:7-alpine
+    container_name: moodle-redis
+    restart: always
+    networks:
+      - internal
+
+  moodle:
+    image: bitnami/moodle:latest
+    container_name: moodle-app
+    restart: always
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8080:8080"
+    environment:
+      MOODLE_DATABASE_TYPE: pgsql
+      MOODLE_DATABASE_HOST: db
+      MOODLE_DATABASE_PORT_NUMBER: 5432
+      MOODLE_DATABASE_NAME: moodle
+      MOODLE_DATABASE_USER: moodle
+      MOODLE_DATABASE_PASSWORD: moodle
+      MOODLE_DATABASE_WAIT_TIMEOUT: 600
+      MOODLE_USERNAME: admin
+      MOODLE_PASSWORD: admin123
+      MOODLE_EMAIL: admin@example.com
+      REDIS_HOST: redis
+    volumes:
+      - moodledata:/bitnami/moodle
+    networks:
+      - internal
+      - public
+
+  cron:
+    image: bitnami/moodle:latest
+    container_name: moodle-cron
+    restart: always
+    depends_on:
+      - moodle
+    command: bash -lc "while true; do /opt/bitnami/php/bin/php /bitnami/moodle/admin/cli/cron.php; sleep 60; done"
+    environment:
+      MOODLE_DATABASE_TYPE: pgsql
+      MOODLE_DATABASE_HOST: db
+      MOODLE_DATABASE_PORT_NUMBER: 5432
+      MOODLE_DATABASE_NAME: moodle
+      MOODLE_DATABASE_USER: moodle
+      MOODLE_DATABASE_PASSWORD: moodle
+      MOODLE_DATABASE_WAIT_TIMEOUT: 600
+      REDIS_HOST: redis
+    volumes:
+      - moodledata:/bitnami/moodle
+    networks:
+      - internal
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: moodle-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    networks:
+      - internal
+      - public
+
+volumes:
+  db_data:
+  moodledata:
+
+networks:
+  internal: {}
+  public: {}
