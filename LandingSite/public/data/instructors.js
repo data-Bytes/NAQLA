@@ -1,0 +1,58 @@
+const instructors = [
+  {
+    id: 1,
+    name: "Youssef Benali",
+    role: "Coding & Robotics Instructor",
+    bio: "Youssef inspires young minds to explore technology and robotics creatively.",
+    image: "/assets/images/thumbs/instructor-img1.png",
+    numberOfCourses: "3 Courses",
+    avgRating: "3.6",
+    numberOfStudents: "300 Students",
+    phone: "(212) 611223344",
+    email: "y.benali@naqla.com",
+    address: "Agadir, Morocco",
+    socials: {
+      facebook: "https://facebook.com",
+      twitter: "https://twitter.com",
+      linkedin: "https://linkedin.com",
+    },
+  },
+  {
+    id: 2,
+    name: "Brahim Dandane",
+    role: "Qur’an & Arabic Teacher",
+    bio: "Brahim helps students connect deeply with Quranic meanings and Arabic fluency.",
+    image: "/assets/images/thumbs/instructor-img2.png",
+    numberOfCourses: "2 Courses",
+    avgRating: "4.7",
+    numberOfStudents: "790 Students",
+    phone: "(212) 6555666666",
+    email: "i.dandane@naqla.com",
+    address: "Casablanca, Morocco",
+    socials: {
+      facebook: "https://facebook.com",
+      twitter: "https://twitter.com",
+      linkedin: "https://linkedin.com",
+    },
+  },
+  {
+    id: 3,
+    name: "Meriyem Amrani",
+    role: "Design & Creative Skills Coach",
+    bio: "Meriyem encourages creativity and expression through design and art.",
+    image: "/assets/images/thumbs/instructor-img3.png",
+    numberOfCourses: "3 Courses",
+    avgRating: "4.6",
+    numberOfStudents: "500 Students",
+    phone: "(212) 688990000",
+    email: "m.amrani@naqla.com",
+    address: "Marrakesh, Morocco",
+    socials: {
+      facebook: "https://facebook.com",
+      twitter: "https://twitter.com",
+      linkedin: "https://linkedin.com",
+    },
+  },
+];
+
+export default instructors;
