@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
 import { Input, Button, LogoMark } from "./ui";
 import type { User } from "../services/auth";
+import { Link } from "react-router-dom";
+
 
 interface LoginPageProps {
   onLoggedIn: (user: User) => void;
@@ -75,6 +77,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoggedIn }) => {
               >
                 {login.isPending ? "Signing in..." : "Sign in"}
               </Button>
+
+              <Link to="/register">
+                <Button
+                  type="button"
+                  className="w-full mt-2 bg-gray-100 text-indigo-700 hover:bg-gray-200"
+                >
+                  Register
+                </Button>
+              </Link>
             </form>
           </div>
         </div>

@@ -12,11 +12,14 @@ export interface LoginResponse {
   error?: string;
 }
 
-export async function loginToMoodle(username: string, password: string): Promise<User> {
+export async function loginToMoodle(
+  username: string,
+  password: string
+): Promise<User> {
   const formData = new URLSearchParams();
   formData.append("username", username);
   formData.append("password", password);
-  formData.append("service", "moodle_mobile_app");
+  formData.append("service", "auth");
 
   const data = await apiFetch<LoginResponse>(`${MOODLE_URL}/login/token.php`, {
     method: "POST",
@@ -39,4 +42,5 @@ export function getCurrentUser(): User | null {
 
 export function logoutUser() {
   localStorage.removeItem("user");
+  window.location.replace("/login");
 }

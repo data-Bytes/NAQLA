@@ -1,4 +1,3 @@
-// src/services/types.ts
 export interface MoodleUser {
   id: number;
   fullname: string;
@@ -10,4 +9,12 @@ export interface MoodleCourse {
   shortname: string;
   fullname: string;
   summary?: string;
+}
+
+export interface RegisterData {
+  username: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  email: string;
 }

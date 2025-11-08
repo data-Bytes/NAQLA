@@ -1,17 +1,20 @@
 import axios from "axios";
 import type { MoodleCourse, MoodleUser } from "./types";
 import { apiFetch } from "./moodleClient";
+import { getCurrentUser } from "./auth";
 
 const MOODLE_URL = "http://localhost:8080/webservice/rest/server.php";
-const TOKEN = "dd3dbc1c873450784a393eb9bd30d842"; 
+const TOKEN = getCurrentUser()?.token || "";
 
-export async function getCourses() {
+
+
+export async function getCourses(token: string) {
   const res = await axios.get(MOODLE_URL, {
     params: {
-      wstoken: TOKEN,
+      wstoken: token,
       wsfunction: "core_course_get_courses",
-      moodlewsrestformat: "json"
-    }
+      moodlewsrestformat: "json",
+    },
   });
   return res.data;
 }
